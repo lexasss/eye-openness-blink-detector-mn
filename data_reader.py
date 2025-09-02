@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Marcus
+@edited: Oleg
+"""
+
 import numpy as np
 import pandas as pd
 import os
@@ -48,8 +54,8 @@ def read(dataset_name):
                     xy = np.c_[df[f'{eye}_gaze_point_on_display_area_x'],
                                 df[f'{eye}_gaze_point_on_display_area_y']]
                     
-                    dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal, 'gaze': xy,
-                                'pid': pid_name, 'file': filename, 'eye': eye})
+                    dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
+                                'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye})
 
     # %% Run classification for Fusion trials
     elif 'fusion' in dataset_name:
@@ -76,15 +82,14 @@ def read(dataset_name):
                 xy = np.c_[df[f'Gaze direction {eye} X'],
                             df[f'Gaze direction {eye} Y']]
 
-                dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal, 'gaze': xy,
-                            'pid': pid_name, 'file': filename, 'eye': eye})
+                dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
+                            'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye})
 
     # %% Run classification for Varjo XR4 trials
     elif 'xr4' in dataset_name:
 
         Fs = 200
         for eye in eyes:
-            key = f'Eye openness {eye}'
 
             files = dataset_path.rglob('*.csv')
             for file in files:
@@ -105,8 +110,8 @@ def read(dataset_name):
                 xy = np.c_[df[f'{eye}_projected_x'],
                            df[f'{eye}_projected_y']]
 
-                dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal, 'gaze': xy,
-                            'pid': pid_name, 'file': filename, 'eye': eye})
+                dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
+                            'gaze': xy, 'pid': pid_name, 'file': filename, 'eye': eye})
 
     # Error: other types of raw data is not supported
     else:

@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Marcus
+@edited: Oleg
+"""
+
 import numpy as np
 
 class Settings():

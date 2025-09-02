@@ -27,7 +27,7 @@ remove_outliers = False     # Remove outliers (pupil size values < 2 mm) and > 2
 menu_prompt = 'Please choose the dataset: '
 datasets = ['spectrum', 'fusion', 'xr4']
 
-dataset, dataset_index = pick(datasets, menu_prompt, indicator='=>', default_index=2)
+dataset, dataset_index = pick(datasets, menu_prompt, indicator='=>', default_index=1)
 
 
 # %% Data import
@@ -89,5 +89,8 @@ cwd = Path.cwd()
 results_path = cwd / 'results'
 os.makedirs(results_path, exist_ok=True)
 
-df_all_eo = pd.concat(out_eo).to_csv(results_path / 'eo.csv')
-df_all_pupil = pd.concat(out_pupil).to_csv(results_path / 'pupil.csv')
+if len(out_eo) > 0:
+    pd.concat(out_eo).to_csv(results_path / 'eo.csv')
+
+if len(out_pupil) > 0:
+    pd.concat(out_pupil).to_csv(results_path / 'pupil.csv')
