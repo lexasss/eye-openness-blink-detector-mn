@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Marcus
+"""
+
 import numpy as np
 
 #%%

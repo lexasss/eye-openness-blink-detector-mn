@@ -20,7 +20,6 @@ def read(dataset_name):
     dfs = []
     Fs = 0
     
-    # %% Run classification for the 12 participants recorded in the DC
     if 'spectrum' in dataset_name:
 
         Fs = 600
@@ -57,7 +56,6 @@ def read(dataset_name):
                     dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
                                 'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye})
 
-    # %% Run classification for Fusion trials
     elif 'fusion' in dataset_name:
 
         Fs = 120
@@ -85,7 +83,6 @@ def read(dataset_name):
                 dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
                             'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye})
 
-    # %% Run classification for Varjo XR4 trials
     elif 'xr4' in dataset_name:
 
         Fs = 200
@@ -100,20 +97,17 @@ def read(dataset_name):
                 print(f'filename [{eye}]')
                 
                 df = pd.read_csv(Path(file), sep=',', decimal = '.')
-                eye_openness_signal = np.c_[df[f'{eye}_eye_openness']]
-                eye_openness_signal = np.squeeze(eye_openness_signal)
-
+                eye_openness_signal = np.array(df[f'{eye}_eye_openness'])
                 pupil_signal = np.array(df[f'{eye}_pupil_diameter_in_mm'])
                 t = np.array(df['relative_to_unix_epoch_timestamp'])
                 t = (t - t[0]) / 1_000_000
 
-                xy = np.c_[df[f'{eye}_projected_x'],
-                           df[f'{eye}_projected_y']]
+                xy = np.c_[df[f'{eye}_forward_x'],
+                           df[f'{eye}_forward_y']]
 
                 dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
                             'gaze': xy, 'pid': pid_name, 'file': filename, 'eye': eye})
 
-    # Error: other types of raw data is not supported
     else:
         print(f'Type "{dataset_name}" is not supported')
 

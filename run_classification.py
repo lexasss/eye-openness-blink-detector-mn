@@ -27,7 +27,7 @@ remove_outliers = False     # Remove outliers (pupil size values < 2 mm) and > 2
 menu_prompt = 'Please choose the dataset: '
 datasets = ['spectrum', 'fusion', 'xr4']
 
-dataset, dataset_index = pick(datasets, menu_prompt, indicator='=>', default_index=1)
+dataset, dataset_index = pick(datasets, menu_prompt, indicator='=>', default_index=2)
 
 
 # %% Data import
