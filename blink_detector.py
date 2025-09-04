@@ -202,8 +202,7 @@ class BlinkDetector(object):
             pupil_signal = ps
 
         # Interpolate short periods of data loss
-        pupil_signal = preprocessing.interpolate_nans(t, pupil_signal,
-                                                              gap_dur=gap_dur)
+        pupil_signal = preprocessing.interpolate_nans(t, pupil_signal, gap_dur=gap_dur)
 
         # Convert to bounds and clean up
         onsets, offsets = self._binary2bounds(np.isnan(pupil_signal) * 1)
@@ -272,7 +271,7 @@ class BlinkDetector(object):
 
         # Interpolate gaps
         eye_openness_signal = preprocessing.interpolate_nans(t, eye_openness_signal,
-                                                              gap_dur=int(gap_dur))
+                                                             gap_dur=int(gap_dur))
 
         # Filter eyelid signal and compute
         eye_openness_signal_filtered = savgol_filter(eye_openness_signal, filter_length, 2,
@@ -440,6 +439,8 @@ class BlinkDetector(object):
         else:
             fig, ax = plt.subplots(2, 1, sharex=True)
 
+        fig.set_size_inches(18, 9.5)
+        fig.canvas.manager.window.wm_geometry("+50+0")
 
         ax[0].plot(t, eye_openness_signal)
 

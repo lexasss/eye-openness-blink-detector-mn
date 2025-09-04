@@ -20,7 +20,7 @@ from settings import Settings
 
 # Import and change (optional) settings
 settings = Settings()
-settings.plot_on = False
+settings.plot_on = True
 remove_outliers = False     # Remove outliers (pupil size values < 2 mm) and > 2.5 SD from the mean of sample in a window
 
 # Get the dataset name
@@ -68,18 +68,14 @@ for df in dfs:
                                         xy = df['gaze'])
 
     # Add participant ID to data frame
-    df_out['pid'] = df['pid']
-    df_out['eye'] = df['eye']
-    df_out['trial'] = df['file']
-    df_out['trial_duration'] = len(df['eo']) / settings.Fs
+    df_out['pid'] = df_out_pupil['pid'] = df['pid']
+    df_out['eye'] = df_out_pupil['eye'] = df['eye']
+    df_out['trial'] = df_out_pupil['trial'] = df['file']
+    df_out['trial_duration'] = df_out_pupil['trial_duration'] = len(df['eo']) / settings.Fs
     df_out['blink_rate'] = len(df_out) / df_out['trial_duration']
-    out_eo.append(df_out)
-
-    df_out_pupil['pid'] = df['pid']
-    df_out_pupil['eye'] = df['eye']
-    df_out_pupil['trial'] = df['file']
-    df_out_pupil['trial_duration'] = len(df['pupil']) / settings.Fs
     df_out_pupil['blink_rate'] = len(df_out_pupil) / df_out_pupil['trial_duration']
+
+    out_eo.append(df_out)
     out_pupil.append(df_out_pupil)
 
 

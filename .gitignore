@@ -3,3 +3,5 @@
 *.spyproject
 .venv/
 results/
+**/*.avi
+**/*.mp4

@@ -104,6 +104,8 @@ def read(dataset_name):
 
                 xy = np.c_[df[f'{eye}_forward_x'],
                            df[f'{eye}_forward_y']]
+                
+                pupil_signal[pupil_signal < 0.1] = np.nan
 
                 dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
                             'gaze': xy, 'pid': pid_name, 'file': filename, 'eye': eye})
