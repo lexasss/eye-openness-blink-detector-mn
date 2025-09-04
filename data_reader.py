@@ -9,10 +9,13 @@ import pandas as pd
 import os
 
 from pathlib import Path
+from collections import namedtuple
 
-def read(dataset_name):
+DictToNamedTuple = namedtuple('DictToNamedTuple', ['t', 'eo', 'pupil', 'gaze', 'pid', 'file', 'eye'])
+
+def read(dataset_name: str):
     cwd = Path.cwd()
-    dataset_path = cwd / 'data' / f'{dataset_name}'
+    dataset_path = cwd / 'data' / dataset_name
 
     eyes = ['left', 'right']
     
@@ -53,8 +56,8 @@ def read(dataset_name):
                     xy = np.c_[df[f'{eye}_gaze_point_on_display_area_x'],
                                 df[f'{eye}_gaze_point_on_display_area_y']]
                     
-                    dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
-                                'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye})
+                    dfs.append(DictToNamedTuple(**{'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
+                                'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye}))
 
     elif 'fusion' in dataset_name:
 
@@ -80,23 +83,24 @@ def read(dataset_name):
                 xy = np.c_[df[f'Gaze direction {eye} X'],
                             df[f'Gaze direction {eye} Y']]
 
-                dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
-                            'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye})
+                dfs.append(DictToNamedTuple(**{'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
+                            'gaze': xy,'pid': pid_name, 'file': filename, 'eye': eye}))
 
     elif 'xr4' in dataset_name:
 
         Fs = 200
-        for eye in eyes:
 
-            files = dataset_path.rglob('*.csv')
-            for file in files:
+        files = dataset_path.rglob('*.csv')
+        for file in files:
 
-                filename = str(file).split(os.sep)[-1][:-4]
-                pid_name = '0'
+            filename = str(file).split(os.sep)[-1][:-4]
+            pid_name = '0'
 
-                print(f'filename [{eye}]')
-                
-                df = pd.read_csv(Path(file), sep=',', decimal = '.')
+            print(f'{filename}')
+            
+            df = pd.read_csv(Path(file), sep=',', decimal = '.')
+
+            for eye in eyes:
                 eye_openness_signal = np.array(df[f'{eye}_eye_openness'])
                 pupil_signal = np.array(df[f'{eye}_pupil_diameter_in_mm'])
                 t = np.array(df['relative_to_unix_epoch_timestamp'])
@@ -107,8 +111,8 @@ def read(dataset_name):
                 
                 pupil_signal[pupil_signal < 0.1] = np.nan
 
-                dfs.append({'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
-                            'gaze': xy, 'pid': pid_name, 'file': filename, 'eye': eye})
+                dfs.append(DictToNamedTuple(**{'t': t, 'eo': eye_openness_signal, 'pupil': pupil_signal,
+                            'gaze': xy, 'pid': pid_name, 'file': filename, 'eye': eye}))
 
     else:
         print(f'Type "{dataset_name}" is not supported')

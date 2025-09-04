@@ -20,7 +20,7 @@ from settings import Settings
 
 # Import and change (optional) settings
 settings = Settings()
-settings.plot_on = True
+settings.plot_on = False
 remove_outliers = False     # Remove outliers (pupil size values < 2 mm) and > 2.5 SD from the mean of sample in a window
 
 # Get the dataset name
@@ -45,33 +45,33 @@ out_eo = []
 out_pupil = []
 
 for df in dfs:
-    df_out, eye_openness_signal_vel = bd.blink_detector_eo(df['t'], df['eo'], settings.Fs, filter_length=settings.filter_length,
+    df_out, eye_openness_signal_vel = bd.blink_detector_eo(df.t, df.eo, settings.Fs, filter_length=settings.filter_length,
                                                         gap_dur=settings.gap_dur,
                                                         width_of_blink=settings.width_of_blink,
                                                         min_separation=settings.min_separation)
 
-    df_out_pupil = bd.blink_detector_pupil(df['t'], df['pupil'], settings.Fs,
+    df_out_pupil = bd.blink_detector_pupil(df.t, df.pupil, settings.Fs,
                                                 gap_dur=settings.gap_dur,
                                                 min_dur=settings.min_blink_dur,
                                                 remove_outliers=remove_outliers,
                                                 min_separation=settings.min_separation)
     if settings.plot_on:
-        bd.plot_blink_detection_results(df['t'],
-                                        df['eo'],
+        bd.plot_blink_detection_results(df.t,
+                                        df.eo,
                                         eye_openness_signal_vel,
                                         df_out,
-                                        df['pid'],
-                                        df['file'],
-                                        df['eye'],
-                                        pupil_signal=df['pupil'],
+                                        df.pid,
+                                        df.file,
+                                        df.eye,
+                                        pupil_signal=df.pupil,
                                         df_blink_pupil = df_out_pupil,
-                                        xy = df['gaze'])
+                                        xy = df.gaze)
 
     # Add participant ID to data frame
-    df_out['pid'] = df_out_pupil['pid'] = df['pid']
-    df_out['eye'] = df_out_pupil['eye'] = df['eye']
-    df_out['trial'] = df_out_pupil['trial'] = df['file']
-    df_out['trial_duration'] = df_out_pupil['trial_duration'] = len(df['eo']) / settings.Fs
+    df_out['pid'] = df_out_pupil['pid'] = df.pid
+    df_out['eye'] = df_out_pupil['eye'] = df.eye
+    df_out['trial'] = df_out_pupil['trial'] = df.file
+    df_out['trial_duration'] = df_out_pupil['trial_duration'] = len(df.eo) / settings.Fs
     df_out['blink_rate'] = len(df_out) / df_out['trial_duration']
     df_out_pupil['blink_rate'] = len(df_out_pupil) / df_out_pupil['trial_duration']
 
